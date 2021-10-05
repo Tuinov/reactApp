@@ -1,1 +1,1 @@
-const i = 9;
+const i = new;

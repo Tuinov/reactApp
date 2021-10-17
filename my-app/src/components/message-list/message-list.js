@@ -12,61 +12,30 @@ const useStyles = makeStyles((ctx) => {
       padding: "10px 15px",
       fontSize: "15px",
     },
-    wrapper: {
-      border: "1px solid red",
-    },
   });
 });
 
-export const MessageList = () => {
+export const MessageList = ({ messages, sendMessage }) => {
   const s = useStyles();
 
   const [value, setValue] = useState("");
-  const [messages, setMessages] = useState([
-    { value: "Hello", author: "User" },
-    { value: "Hello123", author: "Bot" },
-  ]);
 
-  const handleSendMessage = () => {
-    if (value) {
-      setMessages((state) => [...state, { value, author: "User" }]);
+  const handlePressInput = ({ code }) => {
+    if (code === "Enter" && value) {
+      sendMessage({ value, author: "User" });
       setValue("");
     }
   };
 
-  const handlePressInput = ({ code }) => {
-    if (code === "Enter" && value) {
-      handleSendMessage();
+  const handleSendMessage = () => {
+    if (value) {
+      sendMessage({ value, author: "User" });
+      setValue("");
     }
   };
 
-  // const sort1 = () => {
-  //   setMessages([...messages].sort((a, b) => b.value.length - a.value.length));
-  // };
-  // const sort2 = () => {
-  //   setMessages([...messages].sort((a, b) => a.value.length - b.value.length));
-  // };
-
-  useEffect(() => {
-    const lastMessage = messages[messages.length - 1];
-    let timerId = null;
-
-    if (lastMessage?.author === "User") {
-      timerId = setTimeout(() => {
-        setMessages((state) => [
-          ...state,
-          { value: "Helloo from bot", author: "Bot" },
-        ]);
-      }, 500);
-    }
-
-    return () => {
-      clearInterval(timerId);
-    };
-  }, [messages]);
-
   return (
-    <div className={s.wrapper}>
+    <>
       <div>
         {messages.map((message, id) => (
           <Message key={message.value} message={message} />
@@ -88,6 +57,6 @@ export const MessageList = () => {
           </InputAdornment>
         }
       />
-    </div>
+    </>
   );
 };

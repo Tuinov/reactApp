@@ -1,26 +1,42 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import { App, AppClass, Message } from './App';
+import ReactDOM from "react-dom";
+import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
+import { createTheme } from "@mui/material";
+import React from "react";
+import { ChatPage } from "./pages";
+import { CustomThemeProvider } from "./contexts";
+// import { TestRoute } from "./components/test-route";
+import "./global.css";
 
-const msg = "message message message";
-const children = "142652627";
-const myFoo = (item) => {console.log(item)};
+const themes = {
+  light: createTheme({
+    theme: {
+      color: "#17212b",
+    },
+  }),
+  dark: createTheme({
+    theme: {
+      color: "blue",
+    },
+  }),
+};
 
+const App = () => {
+  return (
+    <BrowserRouter>
+      <CustomThemeProvider themes={themes} initialTheme="light">
+        <Switch>
+          <Route path="/chat">
+            <ChatPage />
+          </Route>
 
+          <Route path="*">
+            <h1>404 page</h1>
+            <Link to="/chat">go to Chat</Link>
+          </Route>
+        </Switch>
+      </CustomThemeProvider>
+    </BrowserRouter>
+  );
+};
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-    <AppClass arr={[1,2,3]} myFoo={myFoo} test={msg}>
-      {children}
-    </AppClass>
-
-
-    
-
-
-  </React.StrictMode>,
-  document.getElementById('root')
-);
-
+ReactDOM.render(<App />, document.getElementById("root"));
